@@ -36,6 +36,13 @@ public class MainActivity extends AppCompatActivity {
         mRecyclerView = findViewById(R.id.recycler_view);
         mProgressBar = findViewById(R.id.progress_bar);
         mMainActivityViewModel = ViewModelProviders.of(this).get(MainActivityViewModel.class);
+        mMainActivityViewModel.getNicePlaces().observe(this, new Observer<List<NicePlace>>() {
+            @Override
+            public void onChanged(@Nullable List<NicePlace> nicePlaces) {
+                // ... setter methods
+                mAdapter.notifyDataSetChanged();
+            }
+        });
 
         initRecyclerView();
     }
