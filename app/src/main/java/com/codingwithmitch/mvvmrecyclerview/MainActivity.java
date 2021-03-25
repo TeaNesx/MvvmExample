@@ -36,6 +36,7 @@ public class MainActivity extends AppCompatActivity {
         mRecyclerView = findViewById(R.id.recycler_view);
         mProgressBar = findViewById(R.id.progress_bar);
         mMainActivityViewModel = ViewModelProviders.of(this).get(MainActivityViewModel.class);
+        mMainActivityViewModel.init();
         mMainActivityViewModel.getNicePlaces().observe(this, new Observer<List<NicePlace>>() {
             @Override
             public void onChanged(@Nullable List<NicePlace> nicePlaces) {
@@ -44,10 +45,35 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        mMainActivityViewModel.getIsUpdating().observe(this, new Observer<Boolean>() {
+            @Override
+            public void onChanged(@Nullable Boolean aBoolean) {
+                if (aBoolean) {
+                    showProgressBar();
+                } else {
+                    hideProgressBar();
+                    mRecyclerView.smoothScrollToPosition(mMainActivityViewModel.getNicePlaces().getValue().size()-1);
+                }
+            }
+        });
+
+        mFab.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                mMainActivityViewModel.addNewValue(
+                        new NicePlace(
+                                "https://i.imgur.com/ZcLLrkY.jpg",
+                                "Washington"
+                        )
+                );
+            }
+        });
+
         initRecyclerView();
     }
 
     private void initRecyclerView(){
+        mAdapter = new RecyclerAdapter(this, mMainActivityViewModel.getNicePlaces().getValue());
         RecyclerView.LayoutManager linearLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(linearLayoutManager);
         mRecyclerView.setAdapter(mAdapter);
