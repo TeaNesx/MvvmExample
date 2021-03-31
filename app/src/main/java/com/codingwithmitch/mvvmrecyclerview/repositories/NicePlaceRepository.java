@@ -1,6 +1,7 @@
 package com.codingwithmitch.mvvmrecyclerview.repositories;
 
 import android.arch.lifecycle.MutableLiveData;
+import android.util.Log;
 
 import com.codingwithmitch.mvvmrecyclerview.models.NicePlace;
 
@@ -30,6 +31,8 @@ public class NicePlaceRepository {
 
         MutableLiveData<List<NicePlace>> data = new MutableLiveData<>();
         data.setValue(dataSet);
+        System.out.println("dataset: " + dataSet);
+        System.out.println("data: " + data);
         return data;
     }
 
